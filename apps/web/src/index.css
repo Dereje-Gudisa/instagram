@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+/* Custom scrollbar utility for Instagram story tray */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
