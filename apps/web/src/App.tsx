@@ -19,7 +19,7 @@ const MOCK_POST: Post = {
     username: 'alex_dev',
     avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
   },
-  _count: { likes: 142, comments: 12 },
+  _count: { likes: 50, comments: 12 },
   isLikedByMe: false,
   createdAt: new Date().toISOString(),
 };
