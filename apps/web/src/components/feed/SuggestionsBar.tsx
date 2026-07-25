@@ -22,13 +22,13 @@ const SUGGESTED_USERS = [
     avatarUrl: 'https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=150',
   },
   {
-    id: 's3',
+    id: 's4',
     username: 'The Late night show',
     subtitle: 'Popular',
     avatarUrl: 'https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=150',
   },
   {
-    id: 's3',
+    id: 's5',
     username: 'Adam W.',
     subtitle: 'Popular',
     avatarUrl: 'https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=150',

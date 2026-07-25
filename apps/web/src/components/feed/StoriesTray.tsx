@@ -1,6 +1,6 @@
-// apps/web/src/components/feed/StoriesTray.tsx
-import React from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import type { Story } from '../../types';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const MOCK_STORIES: Story[] = [
   {
@@ -59,7 +59,7 @@ const MOCK_STORIES: Story[] = [
     },
   },
   {
-    id: 's5',
+    id: 's6',
     mediaUrl: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800',
     hasUnseen: false,
     createdAt: new Date().toISOString(),
@@ -70,7 +70,7 @@ const MOCK_STORIES: Story[] = [
     },
   },
   {
-    id: 's5',
+    id: 's7',
     mediaUrl: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800',
     hasUnseen: false,
     createdAt: new Date().toISOString(),
@@ -81,7 +81,7 @@ const MOCK_STORIES: Story[] = [
     },
   },
   {
-    id: 's5',
+    id: 's8',
     mediaUrl: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800',
     hasUnseen: false,
     createdAt: new Date().toISOString(),
@@ -94,8 +94,54 @@ const MOCK_STORIES: Story[] = [
 ];
 
 export function StoriesTray() {
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  // States to toggle arrow visibility dynamically
+  const [showLeftArrow, setShowLeftArrow] = useState(false);
+  const [showRightArrow, setShowRightArrow] = useState(true);
+
+  // Checks scroll position to hide/show left and right arrows
+  const checkScrollPosition = () => {
+    if (!scrollContainerRef.current) return;
+    const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
+
+    setShowLeftArrow(scrollLeft > 5);
+    setShowRightArrow(Math.ceil(scrollLeft + clientWidth) < scrollWidth - 5);
+  };
+
+  useEffect(() => {
+
+    checkScrollPosition();
+    const ref = scrollContainerRef.current;
+    if (ref) {
+      ref.addEventListener('scroll', checkScrollPosition);
+    }
+    return () => ref?.removeEventListener('scroll', checkScrollPosition);
+  }, []);
+
+  // Smooth scroll helper
+  const handleScroll = (direction: 'left' | 'right') => {
+    if (!scrollContainerRef.current) return;
+    const scrollAmount = 280;
+    scrollContainerRef.current.scrollBy({
+      left: direction === 'left' ? -scrollAmount : scrollAmount,
+      behavior: 'smooth',
+    });
+  };
+
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-4 mb-4 overflow-x-auto flex gap-4">
+    <div className=" relative bg-white border border-gray-200 rounded-lg p-4 mb-4">
+      
+      {/* FLOATING LEFT ARROW */}
+
+      {showLeftArrow && (<button className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-white text-gray-800 rounded-full p-1.5 shadow-md hover:bg-gray-100"
+      onClick={() => handleScroll('left')} >
+        <ChevronLeft size={18} />
+      </button>)}
+
+      <div ref={scrollContainerRef}
+        className="flex gap-4 overflow-x-auto scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+        
       {MOCK_STORIES.map((story) => {
         const isCurrentUser = story.user.id === 'u1';
 
@@ -104,6 +150,7 @@ export function StoriesTray() {
             key={story.id}
             className="relative flex flex-col items-center min-w-[66px] focus:outline-none group cursor-pointer"
           >
+            
             {/* Gradient / Gray Ring */}
             <div
               className={`p-[2px] rounded-full transition-transform group-hover:scale-105 ${
@@ -133,9 +180,18 @@ export function StoriesTray() {
             <span className="text-xs text-gray-700 mt-1.5 truncate max-w-[64px]">
               {isCurrentUser ? 'Your story' : story.user.username}
             </span>
+            
           </button>
         );
       })}
+      </div>
+
+      {/* FLOATING RIGHT ARROW */}
+      {showRightArrow && (<button className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-white text-gray-800 rounded-full p-1.5 shadow-md hover:bg-gray-100"
+      onClick={() => handleScroll('right')} >
+        <ChevronRight size={18} />
+      </button>)}
+
     </div>
   );
 }
