@@ -16,7 +16,8 @@ export function PostCard({ post }: PostCardProps) {
     setIsLiked((prev) => !prev);
     setLikesCount((prev) => (isLiked ? prev - 1 : prev + 1));
   };
-  
+
+ 
 
   return (
     <article className="bg-white border border-gray-200 rounded-lg mb-4 overflow-hidden">
@@ -34,6 +35,9 @@ export function PostCard({ post }: PostCardProps) {
             />
           </div>
           <span className="font-semibold text-sm">{post.author.username}</span>
+          <div className="text-[13px] text-gray-400 tracking-wide">
+            <span className='text-[15px]'>● 3h</span>
+          </div>
         </div>
 
         <button className="text-gray-500 hover:text-black focus:outline-none">
@@ -65,7 +69,13 @@ export function PostCard({ post }: PostCardProps) {
                     : 'text-black hover:opacity-60 mr-2'
                 }
               />
-              {likesCount > 0? likesCount: false}
+
+              {likesCount > 0 && (
+                <div className="font-semibold text-l black">
+                  {likesCount.toLocaleString()}
+                  </div>
+                )}
+              
             </button>
 
             {/* Comment Button */}
@@ -74,7 +84,12 @@ export function PostCard({ post }: PostCardProps) {
               aria-label="Comment"
             >
               <MessageCircle size={24} className='mr-2'/>
-              {messagesCount  > 0? messagesCount: false}
+
+              {messagesCount > 0 && (
+                <div className="font-semibold text-l">
+                  {messagesCount.toLocaleString()}
+                  </div>
+                )}
             </button>
             
 
@@ -95,6 +110,17 @@ export function PostCard({ post }: PostCardProps) {
             <Bookmark size={24} />
           </button>
         </div>
+
+        {/* 4. CAPTION SECTION */}
+
+        {post.caption && (
+          <div className="text-sm text-gray-900 mb-1 mt-3 text-start">
+            <span className="font-semibold mr-2">{post.author.username}</span>
+            <span>{post.caption}</span>
+          </div>
+        )}
+
+
       </div>
       
     </article>

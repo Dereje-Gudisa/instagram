@@ -1,11 +1,9 @@
 //import { useState } from 'react'
 import { Sidebar } from './components/layout/Sidebar';
-import spidy from './assets/spidy.png'
-import './assets/spidy.png'
 import './App.css'
 import { PostCard } from './components/feed/PostCard';
 import type { Post } from './types';
-
+import { SuggestionsBar } from './components/feed/SuggestionsBar';
 
 // Mock post data for testing UI rendering
 const MOCK_POST: Post = {
@@ -37,13 +35,13 @@ function App() {
         <div className="max-w-[470px] w-full pt-4">
           <h2 className="text-xl font-bold mb-4">Feed Placeholder</h2>
           <div className="p-8 border border-dashed border-gray-300 rounded bg-white text-center text-gray-500">
-            Layout connected successfully! feed components will render here.
             {/*<StoriesTray />*/}
             <PostCard post={MOCK_POST} />
 
-            <img src= {spidy} alt="spidy" />
           </div>
         </div>
+        <SuggestionsBar />
+
       </main>
     </div>
     </>
