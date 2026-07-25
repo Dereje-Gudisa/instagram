@@ -37,7 +37,7 @@ const SUGGESTED_USERS = [
 
 export function SuggestionsBar() {
   return (
-    <aside className="hidden lg:block w-[320px] pl-8 pt-4">
+    <aside className="hidden lg:block w-[320px] pl-8 pt-4 ml-10 mr-50 mt-8">
       {/* Current User Header */}
       <div className="flex items-center justify-between mb-6">
         <div className='flex items-center gap-3'>

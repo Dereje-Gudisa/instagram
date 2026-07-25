@@ -16,7 +16,17 @@ export function PostCard({ post }: PostCardProps) {
     setIsLiked((prev) => !prev);
     setLikesCount((prev) => (isLiked ? prev - 1 : prev + 1));
   };
+    // Add state for comment input
+  const [commentText, setCommentText] = useState('');
 
+  const handleCommentSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!commentText.trim()) return;
+    
+    // Optimistically increment comment count
+    setMessagesCount((prev) => prev + 1);
+    setCommentText('');
+  };
  
 
   return (
@@ -119,7 +129,6 @@ export function PostCard({ post }: PostCardProps) {
             <span>{post.caption}</span>
           </div>
         )}
-
 
       </div>
       
