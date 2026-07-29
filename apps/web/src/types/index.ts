@@ -25,3 +25,10 @@ export interface Story {
   hasUnseen: boolean;
   createdAt: string;
 }
+
+export interface Friends {
+  id: string;
+  username: string;
+  name: string;
+  avatarUrl: string;
+}
