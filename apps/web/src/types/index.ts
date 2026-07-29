@@ -32,3 +32,15 @@ export interface Friends {
   name: string;
   avatarUrl: string;
 }
+
+export type NavTab = 'home' | 'search' | 'reels' | 'messages' | 'notifications' | 'create' | 'profile';
+export interface SidebarProps {
+  activeTab: NavTab;
+  setActiveTab: (tab: NavTab) => void;
+}
+export interface NavItem {
+  id: NavTab;
+  label: string;
+  icon: React.ElementType;
+  path: string;
+}

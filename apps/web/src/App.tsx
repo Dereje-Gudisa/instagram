@@ -1,10 +1,12 @@
-//import { useState } from 'react'
+import { useState } from 'react'
+import { type NavTab } from './types';
 import { Sidebar } from './components/layout/Sidebar';
 import './App.css'
 import { PostCard } from './components/feed/PostCard';
 import type { Post } from './types';
 import { SuggestionsBar } from './components/feed/SuggestionsBar';
 import { StoriesTray } from './components/feed/StoriesTray';
+import { MessagesPage } from './components/pages/MessagesPage';
 
 // Mock post data for testing UI rendering
 const MOCK_POSTS: Post[] = [
@@ -40,30 +42,41 @@ const MOCK_POSTS: Post[] = [
   },
 ];
 
-function App() {
+export function App() {
+  const [activeTab, setActiveTab] = useState<NavTab>('home');
+
   return (
     <>
       <div className="min-h-screen bg-gray-50 flex">
       {/* Responsive Navigation Shell */}
-      <Sidebar />
+      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab}/>
 
       {/* Main Content Area (Offset for Desktop Sidebar & Mobile Bottom Bar) */}
 
       <main className="flex-1 md:ml-16 xl:ml-64 pb-16 md:pb-0 flex justify-center p-4">
-        <div className="max-w-[650px] w-full pt-4 border border-gray-300 ">
-            {/*<StoriesTray />*/}
-          <StoriesTray />
-          <div className="p-8 ml-[80px] border border-dashed border-gray-300 rounded bg-white text-center text-gray-500 max-w-[470px] ">
-            {MOCK_POSTS.map((post) => (
-              <PostCard key={post.id} post={post} />
-            ))}
-
+        {activeTab === 'home' && (
+        <>
+          <div className="max-w-[650px] w-full pt-4 border border-gray-300 ">
+              {/*<StoriesTray />*/}
+            <StoriesTray />
+            <div className="p-8 ml-[80px] border border-dashed border-gray-300 rounded bg-white text-center text-gray-500 max-w-[470px] ">
+              <div>
+              {MOCK_POSTS.map((post) => (
+                <PostCard key={post.id} post={post} />
+              ))}
+              </div>
+            </div>
           </div>
-        </div>
-        <SuggestionsBar />
+          <SuggestionsBar />
+          </>
 
-      </main>
-    </div>
+          )}
+
+          {/* MESSAGES TAB */}
+          {activeTab === 'messages' && <MessagesPage />}
+        </main>
+        
+      </div>
     </>
   )
 }

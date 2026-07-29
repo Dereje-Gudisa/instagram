@@ -1,35 +1,22 @@
 import React, {useState} from 'react';
 import {
-  Home,
-  Search,
-  Compass,
-  Film,
-  MessageCircle,
-  Heart,
-  PlusSquare,
-  Menu,
-  Camera,
-  User
-} from 'lucide-react';
+  Home, Search, Film, MessageCircle, Heart, PlusSquare, Menu, Camera, User } from 'lucide-react';
+import { type NavItem, type NavTab, type SidebarProps } from '../../types';
 
-export const Sidebar = () => {
+export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab }) => {
 
-  const navItems = [
+  const navItems: NavItem[] = [
     {id: 'home', label: 'Home', icon: Home, path: '/' },
     {id: 'search', label: 'Search', icon: Search, path: '/search' },
     {id: 'reels', label: 'Reels', icon: Film, path: '/reels' },
     {id: 'messages', label: 'Messages', icon: MessageCircle, path: '/messages' },
     {id: 'notifications', label: 'Notifications', icon: Heart, path: '/notifications' },
     {id: 'create', label: 'Create', icon: PlusSquare, path: '/create' },
-    {id: 'profile', label: 'Profile', icon: User, path: '/create' },
+    {id: 'profile', label: 'Profile', icon: User, path: '/profile' },
   ];
 
-  // State tracking which tab/page is active
-  const [activeTab, setActiveTab] = useState('home');
-
-  const handleNavClick = (id: string) => {
-    setActiveTab(id);
-    // You can also add extra side-effects here (e.g. close mobile drawer, send analytics)
+  const handleNavClick = (id: NavTab) => {
+    setActiveTab?.(id);
     console.log(`Navigated to: ${id}`);
   };
 
@@ -78,7 +65,7 @@ export const Sidebar = () => {
         </button>
       </aside>
 
-      {/* ================= MOBILE BOTTOM BAR ================= */}
+      {/*  MOBILE BOTTOM BAR  */}
 
       <nav className="md:hidden fixed bottom-0 left-0 right-0 h-14 bg-white border-t border-gray-200 flex items-center justify-around px-2 z-30">
         {navItems.slice(0, 5).map((item) => {
@@ -87,7 +74,8 @@ export const Sidebar = () => {
 
           return (
             <button
-              key={item.label}
+              key={item.id}
+              onClick={() => handleNavClick(item.id)}
               className="p-2 hover:opacity-70 transition-opacity"
             >
               <Icon size={24} className={isActive ? 'stroke-[2.5px]' : 'stroke-2'} />
