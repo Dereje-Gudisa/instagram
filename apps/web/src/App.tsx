@@ -9,6 +9,9 @@ import { StoriesTray } from './components/feed/StoriesTray';
 import { MessagesPage } from './components/pages/MessagesPage';
 import { SearchPage } from './components/pages/SearchPage';
 import { ReelsPage } from './components/pages/ReelsPage';
+import { NotificationsPage } from './components/pages/NotificationsPage';
+import { ProfilePage } from './components/pages/ProfilePage';
+import { CreatePostModal } from './components/modals/CreatePostModal';
 
 // Mock post data for testing UI rendering
 const MOCK_POSTS: Post[] = [
@@ -44,14 +47,48 @@ const MOCK_POSTS: Post[] = [
   },
 ];
 
+const INITIAL_POSTS: Post[] = [
+  {
+    id: 'p1',
+    caption: 'Building an Instagram clone with React 19, Tailwind v4, and TypeScript! 🚀',
+    mediaUrls: [
+      'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=80',
+    ],
+    author: {
+      id: 'u1',
+      username: 'alex_dev',
+      avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
+    },
+    _count: { likes: 142, comments: 12 },
+    isLikedByMe: false,
+    createdAt: new Date().toISOString(),
+  },
+];
+
 export function App() {
   const [activeTab, setActiveTab] = useState<NavTab>('home');
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [posts, setPosts] = useState<Post[]>(INITIAL_POSTS);
 
+  const handlePostCreated = (newPost: Post) => {
+    setPosts([newPost, ...posts]);
+    setActiveTab('home'); // Redirect back to Home feed
+  };
+  
+  // 1. Create a tab change handler
+  const handleTabChange = (tab: NavTab) => {
+    if (tab === 'create') {
+      setIsCreateModalOpen(true);
+    } else {
+      setActiveTab(tab);
+    }
+  };
+  
   return (
     <>
       <div className="min-h-screen bg-gray-50 flex">
       {/* Responsive Navigation Shell */}
-      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab}/>
+      <Sidebar activeTab={activeTab} setActiveTab={handleTabChange}/>
 
       {/* Main Content Area (Offset for Desktop Sidebar & Mobile Bottom Bar) */}
 
@@ -73,11 +110,29 @@ export function App() {
           </>
 
           )}
+
+          {/* Search TAB */}
           {activeTab === 'search' && <SearchPage />}
+
+          {/* reels TAB */}
           {activeTab === 'reels' && <ReelsPage />}
+
           {/* MESSAGES TAB */}
           {activeTab === 'messages' && <MessagesPage />}
+
+          {/* NOTIFICATIONS TAB */}
+          {activeTab === 'notifications' && <NotificationsPage />}
+
+          {/* PROFILE TAB */}
+          {activeTab === 'profile' && <ProfilePage />}
         </main>
+        
+        {/* CREATE POST MODAL */}
+        <CreatePostModal
+          isOpen={isCreateModalOpen}
+          onClose={() => setIsCreateModalOpen(false)}
+          onPostCreated={handlePostCreated}
+        />
         
       </div>
     </>

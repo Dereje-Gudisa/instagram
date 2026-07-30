@@ -79,7 +79,7 @@ const MOCK_CONVERSATIONS: Conversation[] = [
   },
 ];
 
-export const MessagesPage: React.FC = () => {
+export const MessagesPage = () => {
   const [conversations, setConversations] = useState<Conversation[]>(MOCK_CONVERSATIONS);
   const [activeConversationId, setActiveConversationId] = useState<string>('c1');
   const [searchQuery, setSearchQuery] = useState('');
