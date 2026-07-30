@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { Search, Phone, Video, Info, Image, Heart, Send, CheckCheck } from 'lucide-react';
 
-interface DirectMessage {
+export interface DirectMessage {
   id: string;
   senderId: string;
   text: string;
   timestamp: string;
 }
 
-interface Conversation {
+export interface Conversation {
   id: string;
   user: {
     id: string;
@@ -30,44 +30,44 @@ const MOCK_CONVERSATIONS: Conversation[] = [
     id: 'c1',
     user: {
       id: 'u2',
-      username: 'tech_insider',
-      name: 'Sarah Chen',
-      avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150',
+      username: 'alex_dev',
+      name: 'Alex Rivera',
+      avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
       isOnline: true,
     },
-    lastMessage: 'Check out this new React UI feature!',
-    lastMessageTime: '12m',
+    lastMessage: 'Check out the new message page layout!',
+    lastMessageTime: '10m',
     unreadCount: 2,
     messages: [
-      { id: 'm1', senderId: 'u2', text: 'Hey! Are you working on the social app components today?', timestamp: '10:30 AM' },
-      { id: 'm2', senderId: CURRENT_USER_ID, text: 'Yeah! Just finished the feed and post card components.', timestamp: '10:32 AM' },
-      { id: 'm3', senderId: 'u2', text: 'Awesome! Check out this new React UI feature!', timestamp: '10:35 AM' },
+      { id: 'm1', senderId: 'u2', text: 'Hey! Did you finish setting up the activeTab state?', timestamp: '10:20 AM' },
+      { id: 'm2', senderId: CURRENT_USER_ID, text: 'Yes, Sidebar and page switching are working smoothly now!', timestamp: '10:22 AM' },
+      { id: 'm3', senderId: 'u2', text: 'Check out the new message page layout!', timestamp: '10:25 AM' },
     ],
   },
   {
     id: 'c2',
     user: {
       id: 'u3',
-      username: 'design_daily',
-      name: 'Jessica Taylor',
-      avatarUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150',
+      username: 'tech_insider',
+      name: 'Sarah Chen',
+      avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150',
       isOnline: false,
     },
-    lastMessage: 'The new designs look amazing 🔥',
+    lastMessage: 'The Tailwind layout looks great 🔥',
     lastMessageTime: '2h',
     unreadCount: 0,
     messages: [
-      { id: 'm4', senderId: CURRENT_USER_ID, text: 'Did you get a chance to review the new layout mockups?', timestamp: '8:15 AM' },
-      { id: 'm5', senderId: 'u3', text: 'The new designs look amazing 🔥', timestamp: '8:20 AM' },
+      { id: 'm4', senderId: CURRENT_USER_ID, text: 'Hey Sarah, did you get a chance to review the UI components?', timestamp: '8:15 AM' },
+      { id: 'm5', senderId: 'u3', text: 'The Tailwind layout looks great 🔥', timestamp: '8:20 AM' },
     ],
   },
   {
     id: 'c3',
     user: {
       id: 'u4',
-      username: 'coder_life',
-      name: 'Marcus Vance',
-      avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150',
+      username: 'design_daily',
+      name: 'Jessica Taylor',
+      avatarUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150',
       isOnline: true,
     },
     lastMessage: 'Let us catch up later today.',
@@ -79,23 +79,23 @@ const MOCK_CONVERSATIONS: Conversation[] = [
   },
 ];
 
-export function MessagesPage() {
+export const MessagesPage: React.FC = () => {
   const [conversations, setConversations] = useState<Conversation[]>(MOCK_CONVERSATIONS);
   const [activeConversationId, setActiveConversationId] = useState<string>('c1');
   const [searchQuery, setSearchQuery] = useState('');
   const [inputText, setInputText] = useState('');
 
-  // Currently selected conversation
+  // Selected conversation object
   const activeConversation = conversations.find((c) => c.id === activeConversationId);
 
-  // Filter conversations by username or name
+  // Filter conversations by username or full name
   const filteredConversations = conversations.filter(
     (c) =>
       c.user.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
       c.user.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // Handle sending a new message
+  // Send message handler
   const handleSendMessage = (e: React.FormEvent) => {
     e.preventDefault();
     if (!inputText.trim() || !activeConversationId) return;
@@ -125,9 +125,9 @@ export function MessagesPage() {
   };
 
   return (
-    <div className="flex h-[calc(100vh-2rem)] max-w-6xl mx-auto my-2 bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+    <div className="flex h-[calc(100vh-2rem)] max-w-6xl mx-auto my-2 bg-white border border-gray-200 rounded-xl overflow-hidden shadow-xs">
       
-      {/* --- LEFT SIDEBAR: CONVERSATIONS LIST --- */}
+      {/* ================= LEFT COLUMN: CONVERSATIONS LIST ================= */}
       <div className="w-full md:w-80 lg:w-96 border-r border-gray-200 flex flex-col bg-white">
         
         {/* Header */}
@@ -154,61 +154,65 @@ export function MessagesPage() {
 
         {/* Chat List */}
         <div className="flex-1 overflow-y-auto divide-y divide-gray-50">
-          {filteredConversations.map((conv) => {
-            const isActive = conv.id === activeConversationId;
+          {filteredConversations.length === 0 ? (
+            <p className="text-center text-gray-400 text-sm py-8">No messages found</p>
+          ) : (
+            filteredConversations.map((conv) => {
+              const isActive = conv.id === activeConversationId;
 
-            return (
-              <button
-                key={conv.id}
-                onClick={() => {
-                  setActiveConversationId(conv.id);
-                  // Clear unread count when opening
-                  setConversations((prev) =>
-                    prev.map((c) => (c.id === conv.id ? { ...c, unreadCount: 0 } : c))
-                  );
-                }}
-                className={`w-full p-3 flex items-center gap-3 transition-colors text-left cursor-pointer ${
-                  isActive ? 'bg-gray-100/80' : 'hover:bg-gray-50'
-                }`}
-              >
-                {/* Avatar with Online Status Badge */}
-                <div className="relative flex-shrink-0">
-                  <img
-                    src={conv.user.avatarUrl}
-                    alt={conv.user.username}
-                    className="w-12 h-12 rounded-full object-cover border border-gray-200"
-                  />
-                  {conv.user.isOnline && (
-                    <span className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-green-500 border-2 border-white rounded-full" />
-                  )}
-                </div>
-
-                {/* Details */}
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between">
-                    <p className={`text-sm truncate ${conv.unreadCount > 0 ? 'font-bold text-gray-900' : 'font-medium text-gray-800'}`}>
-                      {conv.user.username}
-                    </p>
-                    <span className="text-xs text-gray-400 flex-shrink-0">{conv.lastMessageTime}</span>
+              return (
+                <button
+                  key={conv.id}
+                  onClick={() => {
+                    setActiveConversationId(conv.id);
+                    // Clear unread count when clicking conversation
+                    setConversations((prev) =>
+                      prev.map((c) => (c.id === conv.id ? { ...c, unreadCount: 0 } : c))
+                    );
+                  }}
+                  className={`w-full p-3 flex items-center gap-3 transition-colors text-left cursor-pointer ${
+                    isActive ? 'bg-gray-100/80' : 'hover:bg-gray-50'
+                  }`}
+                >
+                  {/* Avatar + Online Badge */}
+                  <div className="relative flex-shrink-0">
+                    <img
+                      src={conv.user.avatarUrl}
+                      alt={conv.user.username}
+                      className="w-12 h-12 rounded-full object-cover border border-gray-200"
+                    />
+                    {conv.user.isOnline && (
+                      <span className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-green-500 border-2 border-white rounded-full" />
+                    )}
                   </div>
-                  <p className={`text-xs truncate mt-0.5 ${conv.unreadCount > 0 ? 'font-semibold text-gray-900' : 'text-gray-500'}`}>
-                    {conv.lastMessage}
-                  </p>
-                </div>
 
-                {/* Unread Pill */}
-                {conv.unreadCount > 0 && (
-                  <span className="w-5 h-5 bg-blue-500 text-white rounded-full text-[11px] font-bold flex items-center justify-center flex-shrink-0">
-                    {conv.unreadCount}
-                  </span>
-                )}
-              </button>
-            );
-          })}
+                  {/* Message Details */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between">
+                      <p className={`text-sm truncate ${conv.unreadCount > 0 ? 'font-bold text-gray-900' : 'font-medium text-gray-800'}`}>
+                        {conv.user.username}
+                      </p>
+                      <span className="text-xs text-gray-400 flex-shrink-0">{conv.lastMessageTime}</span>
+                    </div>
+                    <p className={`text-xs truncate mt-0.5 ${conv.unreadCount > 0 ? 'font-semibold text-gray-900' : 'text-gray-500'}`}>
+                      {conv.lastMessage}
+                    </p>
+                  </div>
+
+                  {/* Unread Pill */}
+                  {conv.unreadCount > 0 && (
+                    <span className="w-5 h-5 bg-blue-500 text-white rounded-full text-[11px] font-bold flex items-center justify-center flex-shrink-0">
+                      {conv.unreadCount}
+                    </span>
+                  )}
+                </button>
+              );
+            })
+          )}
         </div>
       </div>
 
-      {/* --- RIGHT MAIN AREA: ACTIVE CHAT WINDOW --- */}
+      {/* ================= RIGHT COLUMN: ACTIVE CHAT WINDOW ================= */}
       {activeConversation ? (
         <div className="hidden md:flex flex-1 flex-col bg-gray-50/50">
           
@@ -235,7 +239,7 @@ export function MessagesPage() {
               </div>
             </div>
 
-            {/* Quick Action Icons */}
+            {/* Header Call Actions */}
             <div className="flex items-center gap-4 text-gray-600">
               <button className="hover:text-gray-900 focus:outline-none cursor-pointer">
                 <Phone size={20} />
@@ -282,7 +286,7 @@ export function MessagesPage() {
             })}
           </div>
 
-          {/* Message Input Box */}
+          {/* Message Input Form */}
           <form onSubmit={handleSendMessage} className="p-4 bg-white border-t border-gray-200">
             <div className="flex items-center gap-3 bg-gray-100 rounded-full px-4 py-2">
               <button type="button" className="text-gray-500 hover:text-gray-800 focus:outline-none cursor-pointer">
@@ -326,4 +330,4 @@ export function MessagesPage() {
 
     </div>
   );
-}
+};

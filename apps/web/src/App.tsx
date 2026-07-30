@@ -7,6 +7,7 @@ import type { Post } from './types';
 import { SuggestionsBar } from './components/feed/SuggestionsBar';
 import { StoriesTray } from './components/feed/StoriesTray';
 import { MessagesPage } from './components/pages/MessagesPage';
+import { SearchPage } from './components/pages/SearchPage';
 
 // Mock post data for testing UI rendering
 const MOCK_POSTS: Post[] = [
@@ -71,7 +72,7 @@ export function App() {
           </>
 
           )}
-
+          {activeTab === 'search' && <SearchPage />}
           {/* MESSAGES TAB */}
           {activeTab === 'messages' && <MessagesPage />}
         </main>

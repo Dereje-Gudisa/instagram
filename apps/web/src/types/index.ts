@@ -44,3 +44,15 @@ export interface NavItem {
   icon: React.ElementType;
   path: string;
 }
+
+//SearchPage
+export interface ExplorePost {
+  id: string;
+  imageUrl: string;
+  likes: number;
+  comments: number;
+  caption: string;
+  username: string;
+  avatarUrl: string;
+  isLarge?: boolean; // Controls 2x2 grid feature tile
+}
