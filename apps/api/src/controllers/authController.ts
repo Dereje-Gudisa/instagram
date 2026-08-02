@@ -2,10 +2,10 @@ import type { Request, Response } from 'express';
 import { User } from '../models/User';
 import { hashPassword, comparePassword, generateToken } from '../utils/auth';
 
-/**
- * @desc    Register a new user
- * @route   POST /api/auth/register
- */
+
+//  Register a new user
+//  @route   POST /api/auth/register
+
 export const register = async (req: Request, res: Response): Promise<void> => {
   try {
     const { username, email, password, fullName } = req.body;
@@ -63,10 +63,9 @@ export const register = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-/**
- * @desc    Login user & return token
- * @route   POST /api/auth/login
- */
+//  Login user & return token
+//  POST /api/auth/login
+
 export const login = async (req: Request, res: Response): Promise<void> => {
   try {
     const { credential, password } = req.body; // Accepts email or username

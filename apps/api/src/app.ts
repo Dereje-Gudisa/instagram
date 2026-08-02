@@ -1,6 +1,7 @@
 import express from 'express';
 import type { Application, Request, Response } from 'express';
 import cors from 'cors';
+import authRoutes from './routes/authRoutes';
 
 export const createApp = (): Application => {
     
@@ -21,6 +22,9 @@ export const createApp = (): Application => {
   app.get('/health', (_req: Request, res: Response) => {
     res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
   });
+
+  // Mount the auth routes under the /api/auth prefix
+  app.use('/api/auth', authRoutes);
 
   return app
 };
